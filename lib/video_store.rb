@@ -62,7 +62,7 @@ class Customer
       #add frequent renter points
       frequent_renter_points +=1
       #add bonues for a two day new release rental
-      if (each.movie,price_code == Movie::RELEASE && each.days_rented > 1)
+      if (each.movie.price_code == Movie::RELEASE && each.days_rented > 1)
         frequent_renter_points+=1
       end
 
