@@ -17,6 +17,24 @@ class Rental
     @movie = movie
     @days_rented = days_rented
   end
+  
+  def get_charge
+    result = 0.0
+    case movie.price_code
+    when Movie::REGULAR
+      result+=2
+      if days_rented > 2
+        result += (days_rented - 2)*1.5
+      end
+    when Movie::NEW_RELEASE
+      result += days_rented*3
+    when Movie::CHILDRENS
+      result+=1.5
+      if days_rented > 3
+        result+= (days_rented - 3)*1.5
+      end
+    end
+  end
 end
 
 class Customer
@@ -43,7 +61,7 @@ class Customer
         break
       end
 
-      this_amount = amount_for(each)
+      this_amount = each.get_charge
 
       #add frequent renter points
       frequent_renter_points +=1
@@ -60,23 +78,5 @@ class Customer
     result += "Amount owed is #{total_amount.to_s}\n"
     result += "You earned #{frequent_renter_points.to_s} frequent renter points"
     result
-  end
-
-  def amount_for(rental)
-    result = 0.0
-    case rental.movie.price_code
-    when Movie::REGULAR
-      result+=2
-      if rental.days_rented > 2
-        result += (rental.days_rented - 2)*1.5
-      end
-    when Movie::NEW_RELEASE
-      result += rental.days_rented*3
-    when Movie::CHILDRENS
-      result+=1.5
-      if rental.days_rented > 3
-        result+= (rental.days_rented - 3)*1.5
-      end
-    end
   end
 end
