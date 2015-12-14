@@ -54,14 +54,13 @@ class Customer
     rentals = @rentals.each
     result = "Rental Record for #{@name}\n"
     while(rentals.count > 0)
-      this_amount = 0.0
       begin
         each = rentals.next
       rescue StopIteration
         break
       end
 
-      this_amount = each.get_charge
+      each.get_charge
 
       #add frequent renter points
       frequent_renter_points +=1
@@ -71,8 +70,8 @@ class Customer
       end
 
       #show figures for this rental
-      result+= "\t#{each.movie.title}\t#{this_amount.to_s}\n"
-      total_amount+= this_amount
+      result+= "\t#{each.movie.title}\t#{each.get_charge.to_s}\n"
+      total_amount+= each.get_charge
     end
     #add footer lines
     result += "Amount owed is #{total_amount.to_s}\n"
