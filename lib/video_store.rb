@@ -42,22 +42,8 @@ class Customer
       rescue StopIteration
         break
       end
-
-      #determines the amount for each line
-      case each.movie.price_code
-      when Movie::REGULAR
-        this_amount+=2
-        if each.days_rented > 2
-          this_amount += (each.days_rented - 2)*1.5
-        end
-      when Movie::NEW_RELEASE
-        this_amount += each.days_rented*3
-      when Movie::CHILDRENS
-        this_amount+=1.5
-        if each.days_rented > 3
-          this_amount+= (each.days_rented - 3)*1.5
-        end
-      end
+      
+      this_amount = amount_for(each)
 
       #add frequent renter points
       frequent_renter_points +=1
@@ -74,5 +60,24 @@ class Customer
     result += "Amount owed is #{total_amount.to_s}\n"
     result += "You earned #{frequent_renter_points.to_s} frequent renter points"
     result
+  end
+  
+  def amount_for(each)
+    this_amount = 0.0
+      case each.movie.price_code
+      when Movie::REGULAR
+        this_amount+=2
+        if each.days_rented > 2
+          this_amount += (each.days_rented - 2)*1.5
+        end
+      when Movie::NEW_RELEASE
+        this_amount += each.days_rented*3
+      when Movie::CHILDRENS
+        this_amount+=1.5
+        if each.days_rented > 3
+          this_amount+= (each.days_rented - 3)*1.5
+        end
+      end
+    this_amount
   end
 end
