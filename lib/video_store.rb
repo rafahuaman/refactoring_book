@@ -17,7 +17,7 @@ class Rental
     @movie = movie
     @days_rented = days_rented
   end
-  
+
   def get_charge
     result = 0.0
     case movie.price_code
@@ -33,6 +33,14 @@ class Rental
       if days_rented > 3
         result+= (days_rented - 3)*1.5
       end
+    end
+  end
+
+  def get_frequent_renter_points
+    if (movie.price_code == Movie::NEW_RELEASE && days_rented > 1)
+      2
+    else
+      1
     end
   end
 end
@@ -60,14 +68,7 @@ class Customer
         break
       end
 
-      each.get_charge
-
-      #add frequent renter points
-      frequent_renter_points +=1
-      #add bonues for a two day new release rental
-      if (each.movie.price_code == Movie::NEW_RELEASE && each.days_rented > 1)
-        frequent_renter_points+=1
-      end
+      frequent_renter_points += each.get_frequent_renter_points
 
       #show figures for this rental
       result+= "\t#{each.movie.title}\t#{each.get_charge.to_s}\n"
