@@ -48,21 +48,21 @@ class Customer
       when Movie::REGULAR
         this_amount+=2
         if each.days_rented > 2
-          this_amount += (each.days_rented -2)*1.5
+          this_amount += (each.days_rented - 2)*1.5
         end
       when Movie::NEW_RELEASE
         this_amount += each.days_rented*3
       when Movie::CHILDRENS
         this_amount+=1.5
         if each.days_rented > 3
-          this_amount+= (each.days_rented -3)*1.5
+          this_amount+= (each.days_rented - 3)*1.5
         end
       end
 
       #add frequent renter points
       frequent_renter_points +=1
       #add bonues for a two day new release rental
-      if (each.movie.price_code == Movie::RELEASE && each.days_rented > 1)
+      if (each.movie.price_code == Movie::NEW_RELEASE && each.days_rented > 1)
         frequent_renter_points+=1
       end
 

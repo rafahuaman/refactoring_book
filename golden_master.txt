@@ -1,0 +1,6 @@
+Rental Record for John
+	title 1	3.0
+	title 2	6.0
+	title 3	3.5
+Amount owed is 12.5
+You earned 4 frequent renter points

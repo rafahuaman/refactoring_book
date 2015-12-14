@@ -3,10 +3,30 @@ require 'video_store'
 require 'rspec/given'
 
 describe Customer do
-  it 'creates a customer' do
-    expect(Customer.new('Mike')).to be_a(Customer)
+  Given(:valid_attributes) {{ name: 'John' }}
+  context 'when creating a new customer' do
+    When(:customer) { Customer.new(valid_attributes[:name]) }
+    Then { expect(customer.name).to eq valid_attributes[:name] }
   end
-  
+
+  describe 'GoldenMaster' do
+    it 'records a golden master' do
+      movie_1= Movie.new('title 1', Movie::CHILDRENS)
+      movie_2= Movie.new('title 2', Movie::NEW_RELEASE)
+      movie_3= Movie.new('title 3', Movie::REGULAR)
+      rental_1 = Rental.new(movie_1, 4)
+      rental_2 = Rental.new(movie_2, 2)
+      rental_3 = Rental.new(movie_3, 3)
+      customer = Customer.new('John')
+      customer.add_rental(rental_1)
+      customer.add_rental(rental_2)
+      customer.add_rental(rental_3)
+      result = customer.statement
+      golden_master = File.open('golden_master.txt', 'r')
+      gm_contents = golden_master.read
+      expect(result).to eq gm_contents
+    end
+  end
 end
 
 describe Movie do
