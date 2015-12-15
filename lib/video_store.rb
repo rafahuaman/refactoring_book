@@ -57,7 +57,6 @@ class Customer
   end
 
   def statement
-    frequent_renter_points = 0
     rentals = @rentals.each
     result = "Rental Record for #{@name}\n"
     while(rentals.count > 0)
@@ -67,14 +66,12 @@ class Customer
         break
       end
 
-      frequent_renter_points += each.get_frequent_renter_points
-
       #show figures for this rental
       result+= "\t#{each.movie.title}\t#{each.get_charge.to_s}\n"
     end
     #add footer lines
     result += "Amount owed is #{get_total_charge.to_s}\n"
-    result += "You earned #{frequent_renter_points.to_s} frequent renter points"
+    result += "You earned #{get_total_frequent_renter_points.to_s} frequent renter points"
     result
   end
 
@@ -88,6 +85,20 @@ class Customer
         break
       end
       result += each.get_charge
+    end
+    result 
+  end
+
+  def get_total_frequent_renter_points
+    result = 0
+    rentals = @rentals.each
+    while(rentals.count > 0)
+      begin
+        each = rentals.next
+      rescue StopIteration
+        break
+      end
+      result += each.get_frequent_renter_points
     end
     result 
   end
