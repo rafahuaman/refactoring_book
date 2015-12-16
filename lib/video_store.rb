@@ -10,42 +10,40 @@ class Movie
   end
   
   def get_charge(days_rented)
-    result = 0.0
-    case price_code
-    when Movie::REGULAR
-      result+=2
-      if days_rented > 2
-        result += (days_rented - 2)*1.5
-      end
-    when Movie::NEW_RELEASE
-      result += days_rented*3
-    when Movie::CHILDRENS
-      result+=1.5
-      if days_rented > 3
-        result+= (days_rented - 3)*1.5
-      end
-    end
+    @price.get_charge(days_rented)
   end
 
   def price_code
-    @price_code
+    @price.get_price_code 
   end
 
   def set_price_code(price_code)
-    @price_code = price_code 
+    case price_code
+    when Movie::REGULAR
+      @price = RegularPrice.new
+    when Movie::NEW_RELEASE
+      @price = NewReleasePrice.new
+    when Movie::CHILDRENS
+      @price = ChildrensPrice.new
+    else
+      raise ArgumentError
+    end
   end
 
   def get_frequent_renter_points(days_rented)
-    if (price_code == Movie::NEW_RELEASE && days_rented > 1)
-      2
-    else
-      1
-    end
+    @price.get_frequent_renter_points(days_rented)
   end
 end
 
 class Price
   def get_price_code
+  end
+  
+  def get_charge(days_rented)
+  end
+  
+  def get_frequent_renter_points(days_rented)
+    1
   end
 end
 
@@ -53,17 +51,43 @@ class ChildrensPrice < Price
   def get_price_code
     Movie::CHILDRENS
   end
+  
+  def get_charge(days_rented)
+    result = 1.5
+    if days_rented > 3
+      result+= (days_rented - 3)*1.5
+    end
+  end
 end
 
 class NewReleasePrice < Price
   def get_price_code
     Movie::NEW_RELEASE
   end
+  
+  def get_charge(days_rented)
+    result = days_rented*3.0
+  end
+
+  def get_frequent_renter_points(days_rented)
+    if days_rented > 1
+      2
+    else
+      1
+    end
+  end
 end
 
 class RegularPrice < Price
   def get_price_code
     Movie::REGULAR
+  end
+  
+  def get_charge(days_rented)
+    result = 2.0
+    if days_rented > 2
+      result += (days_rented - 2)*1.5
+    end
   end
 end
 
