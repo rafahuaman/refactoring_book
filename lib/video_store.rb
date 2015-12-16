@@ -27,6 +27,14 @@ class Movie
       end
     end
   end
+
+  def get_frequent_renter_points(days_rented)
+    if (price_code == Movie::NEW_RELEASE && days_rented > 1)
+      2
+    else
+      1
+    end
+  end
 end
 
 class Rental
@@ -41,11 +49,7 @@ class Rental
   end
 
   def get_frequent_renter_points
-    if (movie.price_code == Movie::NEW_RELEASE && days_rented > 1)
-      2
-    else
-      1
-    end
+    movie.get_frequent_renter_points(days_rented)
   end
 end
 
