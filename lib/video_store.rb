@@ -1,5 +1,4 @@
 class Movie
-  attr_accessor :price_code
   attr_reader :title
   CHILDRENS = 2 
   REGULAR = 0 
@@ -7,7 +6,7 @@ class Movie
 
   def initialize(title, price_code)
     @title = title
-    @price_code = price_code
+    set_price_code(price_code)
   end
   
   def get_charge(days_rented)
@@ -28,12 +27,43 @@ class Movie
     end
   end
 
+  def price_code
+    @price_code
+  end
+
+  def set_price_code(price_code)
+    @price_code = price_code 
+  end
+
   def get_frequent_renter_points(days_rented)
     if (price_code == Movie::NEW_RELEASE && days_rented > 1)
       2
     else
       1
     end
+  end
+end
+
+class Price
+  def get_price_code
+  end
+end
+
+class ChildrensPrice < Price
+  def get_price_code
+    Movie::CHILDRENS
+  end
+end
+
+class NewReleasePrice < Price
+  def get_price_code
+    Movie::NEW_RELEASE
+  end
+end
+
+class RegularPrice < Price
+  def get_price_code
+    Movie::REGULAR
   end
 end
 
